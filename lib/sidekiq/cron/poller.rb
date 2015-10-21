@@ -1,6 +1,5 @@
 require 'sidekiq'
 require 'sidekiq/util'
-require 'sidekiq/actor'
 require 'sidekiq/cron'
 
 module Sidekiq
@@ -12,7 +11,6 @@ module Sidekiq
     # The Poller checks Redis every N seconds for sheduled cron jobs
     class Poller
       include Util
-      include Actor
 
       def poll(first_time=false)
         watchdog('scheduling cron poller thread died!') do
@@ -52,12 +50,7 @@ module Sidekiq
       end
 
       def add_jitter
-        begin
-          sleep(poll_interval * rand)
-        rescue Celluloid::Task::TerminatedError
-          # Hit Ctrl-C when Sidekiq is finished booting and we have a chance
-          # to get here.
-        end
+        sleep(poll_interval * rand)
       end
 
     end

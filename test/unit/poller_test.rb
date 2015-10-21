@@ -24,12 +24,7 @@ describe 'Cron Poller' do
     }
     @args2 = @args.merge(name: 'with_queue', klass: 'CronTestClassWithQueue', cron: "*/10 * * * *")
 
-    Celluloid.boot
     @poller = Sidekiq::Cron::Poller.new
-  end
-
-  after do
-    Celluloid.shutdown
   end
 
   it 'not enqueue any job - new jobs' do
